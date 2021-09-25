@@ -1,0 +1,25 @@
+.year {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .select {
+    color: #fff;
+    border-radius: 99px;
+    background-color: #db3d44;
+  }
+
+  .disable {
+    color: #eee;
+    cursor: default;
+  }
+
+  li {
+    display: flex;
+    flex: 0 0 25%;
+    line-height: 48px;
+    justify-content: center;
+    cursor: pointer;
+  }
+}

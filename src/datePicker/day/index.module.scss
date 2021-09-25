@@ -1,0 +1,28 @@
+.day {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .disable {
+    color: #eee;
+    cursor: default;
+  }
+
+  .today {
+    color: #db3d44;
+  }
+
+  .select {
+    color: #fff;
+    border-radius: 99px;
+    background-color: #db3d44;
+  }
+
+  li {
+    display: flex;
+    flex: 0 0 14%;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
