@@ -2,17 +2,43 @@
 import React from "react";
 import styles from "./week.module.scss";
 
+const DAY_LIST = [
+  {
+    id: 0,
+    text: "Su",
+  },
+  {
+    id: 1,
+    text: "Mo",
+  },
+  {
+    id: 2,
+    text: "Tu",
+  },
+  {
+    id: 3,
+    text: "We",
+  },
+  {
+    id: 4,
+    text: "Th",
+  },
+  {
+    id: 5,
+    text: "Fr",
+  },
+  {
+    id: 6,
+    text: "Sa",
+  },
+];
 class Week extends React.Component {
   render() {
     return (
       <div className={styles.week}>
-        <span>Su</span>
-        <span>Mo</span>
-        <span>Tu</span>
-        <span>We</span>
-        <span>Th</span>
-        <span>Fr</span>
-        <span>Sa</span>
+        {DAY_LIST.map((day) => (
+          <span key={day.id}>{day.text}</span>
+        ))}
       </div>
     );
   }
