@@ -1,8 +1,8 @@
 "use strict";
 import React from "react";
-import styles from "./index.module.scss";
+import styles from "./month.module.scss";
 
-class Month extends React.Component {
+class MonthComponent extends React.Component {
   render() {
     return (
       <ul className={styles.month}>
@@ -23,4 +23,4 @@ class Month extends React.Component {
   }
 }
 
-export default Month;
+export default MonthComponent;

@@ -32,7 +32,7 @@ const DAY_LIST = [
     text: "Sa",
   },
 ];
-class Week extends React.Component {
+class WeekComponent extends React.Component {
   render() {
     return (
       <div className={styles.week}>
@@ -44,4 +44,4 @@ class Week extends React.Component {
   }
 }
 
-export default Week;
+export default WeekComponent;

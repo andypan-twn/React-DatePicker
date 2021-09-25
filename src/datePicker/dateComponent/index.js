@@ -1,11 +1,11 @@
 "use strict";
 import React from "react";
-import styles from "./index.module.scss";
-import Week from "./week";
+import styles from "./date.module.scss";
+import WeekComponent from "./weekComponent";
 
 const DATE_LENGTH = 7 * 6;
 
-class Day extends React.Component {
+class DateComponent extends React.Component {
   render() {
     const preDateList = (y, m) => {
       let firstDateOfMonth = new Date(y, m, 1),
@@ -89,7 +89,7 @@ class Day extends React.Component {
 
     return (
       <>
-        <Week></Week>
+        <WeekComponent></WeekComponent>
         <ul className={styles.day}>
           {dataList().map((data) => (
             <li key={data.id} className={data.className}>
@@ -102,4 +102,4 @@ class Day extends React.Component {
   }
 }
 
-export default Day;
+export default DateComponent;

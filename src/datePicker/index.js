@@ -1,9 +1,9 @@
 "use strict";
 import React from "react";
-import styles from "./index.module.scss";
-import Day from "./day";
-import Month from "./month";
-import Year from "./Year";
+import styles from "./datePicker.module.scss";
+import DateComponent from "./dateComponent";
+import MonthComponent from "./monthComponent";
+import YearComponent from "./yearComponent";
 
 class DatePicker extends React.Component {
   render() {
@@ -14,9 +14,9 @@ class DatePicker extends React.Component {
           <div className={styles.info}>Sep 2021</div>
           <div className={styles.btn}>&gt;</div>
         </div>
-        <Day></Day>
-        <Month></Month>
-        <Year></Year>
+        <DateComponent></DateComponent>
+        <MonthComponent></MonthComponent>
+        <YearComponent></YearComponent>
       </section>
     );
   }

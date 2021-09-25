@@ -1,8 +1,8 @@
 "use strict";
 import React from "react";
-import styles from "./index.module.scss";
+import styles from "./year.module.scss";
 
-class Year extends React.Component {
+class YearComponent extends React.Component {
   render() {
     return (
       <ul className={styles.year}>
@@ -23,4 +23,4 @@ class Year extends React.Component {
   }
 }
 
-export default Year;
+export default YearComponent;
