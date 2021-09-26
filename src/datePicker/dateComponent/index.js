@@ -10,10 +10,26 @@ class DateComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    let y = props.year;
-    let m = props.month;
+    this.state = this.processSelect(
+      this.props.year,
+      this.props.month,
+      this.props.select
+    );
+  }
 
-    let selectObj = new Date(props.select),
+  componentDidUpdate(prevProps) {
+    let isPropsUpdate =
+      this.props.month !== prevProps.month ||
+      this.props.select !== prevProps.select;
+    if (isPropsUpdate) {
+      this.setState(
+        this.processSelect(this.props.year, this.props.month, this.props.select)
+      );
+    }
+  }
+
+  processSelect(y, m, select) {
+    let selectObj = new Date(select),
       selectYear = selectObj.getFullYear(),
       selectDate = selectObj.getDate(),
       isSelectThisYear = selectYear == y,
@@ -25,20 +41,19 @@ class DateComponent extends React.Component {
       isSelectThisMonth = selectMonth == m;
     }
 
-    this.state = {
-      year: props.year,
-      month: props.month,
+    return {
       selectDate: selectDate,
       isSelectThisMonth: isSelectThisMonth,
     };
   }
 
   render() {
-    const { year, month, selectDate, isSelectThisMonth } = this.state;
+    const { selectDate, isSelectThisMonth } = this.state;
+    const { year, month } = this.props;
 
     const preDateList = () => {
       let firstDateOfMonth = new Date(year, month, 1),
-        preMonth = month - 1,
+        preMonth = parseInt(month) - 1,
         diff = firstDateOfMonth.getDay(); // return day of the week
 
       let result = [];
@@ -64,7 +79,7 @@ class DateComponent extends React.Component {
         todayOfMonth = today.getMonth(),
         todayOfDate = today.getDate();
 
-      let lastOfDate = new Date(year, month + 1, 0).getDate();
+      let lastOfDate = new Date(year, parseInt(month) + 1, 0).getDate();
 
       let checkTodayOfDate = false;
       if (todayOfYear == year && todayOfMonth == month) {
@@ -103,7 +118,7 @@ class DateComponent extends React.Component {
       let nextDate = 1;
       while (lessLength > 0) {
         result.push({
-          id: `${month + 1}_${nextDate}`,
+          id: `${parseInt(month) + 1}_${nextDate}`,
           className: styles.disable,
           text: nextDate,
         });
