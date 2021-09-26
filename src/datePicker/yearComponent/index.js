@@ -1,26 +1,76 @@
 "use strict";
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./year.module.scss";
 
 class YearComponent extends React.Component {
   render() {
+    const { start, end, select } = this.props;
+
+    const yearList = () => {
+      let result = [];
+
+      let preYear = start - 1;
+      let preYearClassName = [styles.disable];
+      if (preYear == select) {
+        preYearClassName.push(styles.select);
+      }
+      result.push({
+        id: preYear,
+        className: preYearClassName,
+        text: preYear,
+      });
+
+      let current = start;
+      while (current <= end) {
+        let className = [];
+        if (current == select) {
+          className = [styles.select];
+        }
+
+        result.push({
+          id: current,
+          className: className,
+          text: current,
+        });
+        current++;
+      }
+
+      let nextYear = end + 1;
+      let nextYearClassName = [styles.disable];
+      if (preYear == select) {
+        nextYearClassName.push(styles.select);
+      }
+      result.push({
+        id: nextYear,
+        className: nextYearClassName,
+        text: nextYear,
+      });
+
+      return result;
+    };
+
     return (
       <ul className={styles.year}>
-        <li className={styles.disable}>2009</li>
-        <li>2010</li>
-        <li>2011</li>
-        <li>2012</li>
-        <li className={styles.select}>2013</li>
-        <li>2014</li>
-        <li>2015</li>
-        <li>2016</li>
-        <li>2017</li>
-        <li>2018</li>
-        <li>2019</li>
-        <li className={styles.disable}>2020</li>
+        {yearList().map((year) => (
+          <li key={year.id} className={year.className.join(" ")}>
+            {year.text}
+          </li>
+        ))}
       </ul>
     );
   }
 }
+
+YearComponent.propTypes = {
+  start: PropTypes.string,
+  end: PropTypes.string,
+  select: PropTypes.string,
+};
+YearComponent.defaultProps = {
+  start: "2020",
+  end: "2029",
+  select: "2021",
+};
 
 export default YearComponent;
