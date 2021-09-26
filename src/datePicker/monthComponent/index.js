@@ -1,8 +1,9 @@
 "use strict";
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./month.module.scss";
 
-const MONTH_LIST = [
+const MONTH_DATA = [
   {
     id: 1,
     text: "Jan",
@@ -37,7 +38,6 @@ const MONTH_LIST = [
   },
   {
     id: 9,
-    className: "select",
     text: "Sep",
   },
   {
@@ -55,9 +55,20 @@ const MONTH_LIST = [
 ];
 class MonthComponent extends React.Component {
   render() {
+    const { select } = this.props;
+
+    const monthList = () => {
+      let result = MONTH_DATA;
+
+      if (select != "") {
+        result[select - 1].className = "select";
+      }
+
+      return result;
+    };
     return (
       <ul className={styles.month}>
-        {MONTH_LIST.map((month) => (
+        {monthList().map((month) => (
           <li key={month.id} className={styles[month.className || ""]}>
             {month.text}
           </li>
@@ -66,5 +77,12 @@ class MonthComponent extends React.Component {
     );
   }
 }
+
+MonthComponent.propTypes = {
+  select: PropTypes.string,
+};
+MonthComponent.defaultProps = {
+  select: "",
+};
 
 export default MonthComponent;
