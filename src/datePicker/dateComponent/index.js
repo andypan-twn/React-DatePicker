@@ -19,8 +19,6 @@ class DateComponent extends React.Component {
       isSelectThisYear = selectYear == y,
       isSelectThisMonth = false;
 
-    console.log(props.select);
-
     if (isSelectThisYear) {
       let selectMonth = selectObj.getMonth();
 
