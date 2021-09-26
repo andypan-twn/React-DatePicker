@@ -25,3 +25,10 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .date-picker {
+    width: 95%;
+    min-width: 200px;
+  }
+}
