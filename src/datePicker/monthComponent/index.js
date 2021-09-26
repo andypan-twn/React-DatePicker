@@ -28,7 +28,11 @@ class MonthComponent extends React.Component {
     return (
       <ul className={styles.month}>
         {monthList().map((month, index) => (
-          <li key={index} className={styles[month.className]}>
+          <li
+            key={index}
+            className={styles[month.className]}
+            onClick={() => this.props.onSelect(index)}
+          >
             {month.text}
           </li>
         ))}
@@ -39,6 +43,7 @@ class MonthComponent extends React.Component {
 
 MonthComponent.propTypes = {
   select: PropTypes.string,
+  onSelect: PropTypes.func,
 };
 MonthComponent.defaultProps = {
   select: "",

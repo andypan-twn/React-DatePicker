@@ -5,7 +5,7 @@ import styles from "./datePicker.module.scss";
 import DateComponent from "./dateComponent";
 import MonthComponent from "./monthComponent";
 import YearComponent from "./yearComponent";
-import { MonthStr } from "./utils/monthStr.js";
+import HeaderComponent from "./headerComponent";
 
 class DatePicker extends React.Component {
   constructor(props) {
@@ -22,7 +22,6 @@ class DatePicker extends React.Component {
       displayYear: false,
       selectYear: selectYear,
       selectMonth: selectMonth,
-      selectText: [MonthStr[selectMonth], selectYear].join(" "),
       dateProps: {
         year: selectYear,
         month: selectMonth,
@@ -39,15 +38,83 @@ class DatePicker extends React.Component {
     };
   }
 
+  processDisplayStatus(status) {
+    if (status >= 3) {
+      return;
+    }
+    let displayDate,
+      displayMonth,
+      displayYear = false;
+
+    switch (status) {
+      case 0:
+        displayDate = true;
+        break;
+      case 1:
+        displayMonth = true;
+        break;
+      case 2:
+        displayYear = true;
+        break;
+    }
+
+    this.setState((state) => {
+      state.datePickerState = status;
+      state.displayDate = displayDate;
+      state.displayMonth = displayMonth;
+      state.displayYear = displayYear;
+
+      return state;
+    });
+  }
+
+  processMonth(month) {
+    this.setState((state) => {
+      if (month < 0) {
+        state.dateProps.month = "11";
+        state.dateProps.year = (parseInt(state.dateProps.year) - 1).toString();
+      } else if (month > 11) {
+        state.dateProps.month = "0";
+        state.dateProps.year = (parseInt(state.dateProps.year) + 1).toString();
+      } else {
+        state.dateProps.month = month.toString();
+      }
+
+      return state;
+    });
+  }
+
+  processYear(year) {
+    this.setState((state) => {
+      state.dateProps.year = year.toString();
+      if (year == state.selectYear) {
+        state.monthProps.select = state.selectMonth;
+      } else {
+        state.monthProps.select = "";
+      }
+      return state;
+    });
+  }
+
+  processTenYear(input) {
+    if (input <= 99 || input >= 1000) {
+      return;
+    }
+
+    this.setState((state) => {
+      state.yearProps.start = input + "0";
+      state.yearProps.end = input + "9";
+
+      return state;
+    });
+  }
+
   render() {
     const {
       datePickerState,
       displayDate,
       displayMonth,
       displayYear,
-      selectYear,
-      selectMonth,
-      selectText,
       dateProps,
       monthProps,
       yearProps,
@@ -56,54 +123,13 @@ class DatePicker extends React.Component {
     const preBtnClick = () => {
       switch (datePickerState) {
         case 0:
-          let preMonth = parseInt(dateProps.month) - 1;
-
-          this.setState((state) => {
-            if (preMonth < 0) {
-              state.dateProps.month = "11";
-              state.dateProps.year = (parseInt(dateProps.year) - 1).toString();
-            } else {
-              state.dateProps.month = preMonth.toString();
-            }
-            state.selectText = [
-              MonthStr[state.dateProps.month],
-              state.dateProps.year,
-            ].join(" ");
-
-            return state;
-          });
+          this.processMonth(parseInt(dateProps.month) - 1);
           break;
         case 1:
-          let preYear = parseInt(dateProps.year) - 1;
-
-          this.setState((state) => {
-            state.dateProps.year = preYear;
-            state.selectText = preYear;
-            if (preYear == selectYear) {
-              state.monthProps.select = selectMonth;
-            } else {
-              state.monthProps.select = "";
-            }
-            return state;
-          });
+          this.processYear(parseInt(dateProps.year) - 1);
           break;
         case 2:
-          let preState = parseInt(yearProps.start.slice(0, 3)) - 1;
-
-          if (preState <= 99) {
-            return;
-          }
-
-          this.setState((state) => {
-            state.yearProps.start = preState + "0";
-            state.yearProps.end = preState + "9";
-            state.selectText = [
-              state.yearProps.start,
-              state.yearProps.end,
-            ].join(" - ");
-
-            return state;
-          });
+          this.processTenYear(parseInt(yearProps.start.slice(0, 3)) - 1);
           break;
       }
     };
@@ -111,87 +137,55 @@ class DatePicker extends React.Component {
     const nextBtnClick = () => {
       switch (datePickerState) {
         case 0:
-          let nextMonth = parseInt(dateProps.month) + 1;
-
-          this.setState((state) => {
-            console.log(nextMonth);
-            if (nextMonth > 11) {
-              state.dateProps.month = "0";
-              state.dateProps.year = (parseInt(dateProps.year) + 1).toString();
-            } else {
-              state.dateProps.month = nextMonth.toString();
-            }
-            state.selectText = [
-              MonthStr[state.dateProps.month],
-              state.dateProps.year,
-            ].join(" ");
-
-            return state;
-          });
+          this.processMonth(parseInt(dateProps.month) + 1);
           break;
         case 1:
-          let nextYear = parseInt(dateProps.year) + 1;
-
-          this.setState((state) => {
-            state.dateProps.year = nextYear;
-            state.selectText = nextYear;
-            if (nextYear == selectYear) {
-              state.monthProps.select = selectMonth;
-            } else {
-              state.monthProps.select = "";
-            }
-            return state;
-          });
+          this.processYear(parseInt(dateProps.year) + 1);
           break;
         case 2:
-          let preState = parseInt(yearProps.start.slice(0, 3)) + 1;
-
-          if (preState >= 1000) {
-            return;
-          }
-
-          this.setState((state) => {
-            state.yearProps.start = preState + "0";
-            state.yearProps.end = preState + "9";
-            state.selectText = [
-              state.yearProps.start,
-              state.yearProps.end,
-            ].join(" - ");
-
-            return state;
-          });
+          this.processTenYear(parseInt(yearProps.start.slice(0, 3)) + 1);
           break;
       }
     };
+
     const yearBtnClick = () => {
-      if (datePickerState >= 2) {
-        return;
-      }
-      let updateSelectText = selectText;
-      let displayDate,
-        displayMonth,
-        displayYear = false;
+      this.processDisplayStatus(datePickerState + 1);
+    };
 
-      switch (datePickerState) {
-        case 0:
-          displayMonth = true;
-          updateSelectText = dateProps.year;
-          break;
-        case 1:
-          displayYear = true;
-          updateSelectText = [yearProps.start, yearProps.end].join(" - ");
-          break;
-        default:
-          displayDate = true;
-      }
+    const onSelectDate = (date) => {
+      this.setState(
+        (state) => {
+          state.selectYear = state.dateProps.year;
+          state.yearProps.select = state.dateProps.year;
+          state.selectMonth = state.dateProps.month;
+          state.monthProps.select = state.dateProps.month;
+          state.dateProps.select = [
+            state.dateProps.year,
+            parseInt(state.dateProps.month) + 1,
+            date,
+          ].join("-");
 
+          return state;
+        },
+        () => {
+          this.props.onSelect(dateProps.select);
+        }
+      );
+    };
+
+    const onSelectMonth = (month) => {
+      this.processDisplayStatus(datePickerState - 1);
       this.setState((state) => {
-        state.datePickerState += 1;
-        state.displayDate = displayDate;
-        state.displayMonth = displayMonth;
-        state.displayYear = displayYear;
-        state.selectText = updateSelectText;
+        state.dateProps.month = month.toString();
+        return state;
+      });
+    };
 
+    const onSelectYear = (year) => {
+      this.processDisplayStatus(datePickerState - 1);
+      this.processYear(parseInt(year));
+      this.setState((state) => {
+        state.dateProps.year = year.toString();
         return state;
       });
     };
@@ -203,15 +197,30 @@ class DatePicker extends React.Component {
             &lt;
           </div>
           <div className={styles.info} onClick={yearBtnClick}>
-            {selectText}
+            <HeaderComponent
+              start={yearProps.start}
+              end={yearProps.end}
+              year={dateProps.year}
+              month={dateProps.month}
+              displayState={datePickerState}
+            ></HeaderComponent>
           </div>
           <div className={styles.btn} onClick={nextBtnClick}>
             &gt;
           </div>
         </div>
-        {displayDate && <DateComponent {...dateProps}></DateComponent>}
-        {displayMonth && <MonthComponent {...monthProps}></MonthComponent>}
-        {displayYear && <YearComponent {...yearProps}></YearComponent>}
+        {displayDate && (
+          <DateComponent {...dateProps} onSelect={onSelectDate}></DateComponent>
+        )}
+        {displayMonth && (
+          <MonthComponent
+            {...monthProps}
+            onSelect={onSelectMonth}
+          ></MonthComponent>
+        )}
+        {displayYear && (
+          <YearComponent {...yearProps} onSelect={onSelectYear}></YearComponent>
+        )}
       </section>
     );
   }

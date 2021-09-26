@@ -45,7 +45,11 @@ class YearComponent extends React.Component {
     return (
       <ul className={styles.year}>
         {yearList().map((year) => (
-          <li key={year.id} className={year.className.join(" ")}>
+          <li
+            key={year.id}
+            className={year.className.join(" ")}
+            onClick={() => this.props.onSelect(year.text)}
+          >
             {year.text}
           </li>
         ))}
@@ -58,6 +62,7 @@ YearComponent.propTypes = {
   start: PropTypes.string.isRequired,
   end: PropTypes.string.isRequired,
   select: PropTypes.string,
+  onSelect: PropTypes.func,
 };
 
 YearComponent.defaultProps = {

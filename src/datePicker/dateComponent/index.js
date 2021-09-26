@@ -63,6 +63,7 @@ class DateComponent extends React.Component {
 
         result.push({
           id: `${preMonth}_${date}`,
+          disable: true,
           className: styles.disable,
           text: date,
         });
@@ -99,7 +100,7 @@ class DateComponent extends React.Component {
 
         result.push({
           id: `${month}_${dateInfo}`,
-          key: dateInfo,
+          disable: false,
           className: classNameArr.join(" "),
           text: dateInfo,
         });
@@ -119,6 +120,7 @@ class DateComponent extends React.Component {
       while (lessLength > 0) {
         result.push({
           id: `${parseInt(month) + 1}_${nextDate}`,
+          disable: true,
           className: styles.disable,
           text: nextDate,
         });
@@ -130,12 +132,23 @@ class DateComponent extends React.Component {
       return result;
     };
 
+    const handleClick = (data) => {
+      if (data.disable) {
+        return;
+      }
+      this.props.onSelect(data.text);
+    };
+
     return (
       <>
         <WeekComponent></WeekComponent>
         <ul className={styles.day}>
           {dataList().map((data) => (
-            <li key={data.id} className={data.className}>
+            <li
+              key={data.id}
+              className={data.className}
+              onClick={() => handleClick(data)}
+            >
               {data.text}
             </li>
           ))}
@@ -149,6 +162,7 @@ DateComponent.propTypes = {
   year: PropTypes.string,
   month: PropTypes.string,
   select: PropTypes.string,
+  onSelect: PropTypes.func,
 };
 DateComponent.defaultProps = {
   year: new Date().getFullYear(),
