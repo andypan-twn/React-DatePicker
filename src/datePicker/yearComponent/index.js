@@ -10,14 +10,10 @@ class YearComponent extends React.Component {
     const yearList = () => {
       let result = [];
 
-      let preYear = start - 1;
-      let preYearClassName = [styles.disable];
-      if (preYear == select) {
-        preYearClassName.push(styles.select);
-      }
+      let preYear = parseInt(start) - 1;
       result.push({
         id: preYear,
-        className: preYearClassName,
+        className: [styles.disable],
         text: preYear,
       });
 
@@ -36,14 +32,10 @@ class YearComponent extends React.Component {
         current++;
       }
 
-      let nextYear = end + 1;
-      let nextYearClassName = [styles.disable];
-      if (preYear == select) {
-        nextYearClassName.push(styles.select);
-      }
+      let nextYear = parseInt(end) + 1;
       result.push({
         id: nextYear,
-        className: nextYearClassName,
+        className: [styles.disable],
         text: nextYear,
       });
 
@@ -63,14 +55,13 @@ class YearComponent extends React.Component {
 }
 
 YearComponent.propTypes = {
-  start: PropTypes.string,
-  end: PropTypes.string,
+  start: PropTypes.string.isRequired,
+  end: PropTypes.string.isRequired,
   select: PropTypes.string,
 };
+
 YearComponent.defaultProps = {
-  start: "2020",
-  end: "2029",
-  select: "2021",
+  select: "",
 };
 
 export default YearComponent;

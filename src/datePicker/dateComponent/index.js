@@ -136,9 +136,9 @@ DateComponent.propTypes = {
   select: PropTypes.string,
 };
 DateComponent.defaultProps = {
-  year: "2021",
-  month: "8",
-  select: "2021-9-27",
+  year: new Date().getFullYear(),
+  month: new Date().getMonth(),
+  select: "",
 };
 
 export default DateComponent;
