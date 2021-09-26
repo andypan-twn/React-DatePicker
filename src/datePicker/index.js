@@ -11,11 +11,24 @@ class DatePicker extends React.Component {
   constructor(props) {
     super(props);
 
-    let selectObj = new Date(this.props.selectDate),
+    this.state = this.initState(this.props.selectDate);
+  }
+
+  componentDidUpdate(prevProps) {
+    let isPropsUpdate = this.props.selectDate !== prevProps.selectDate;
+    if (isPropsUpdate) {
+      if (isNaN(new Date(this.props.selectDate).getTime())) {
+        return;
+      }
+      this.setState(this.initState(this.props.selectDate));
+    }
+  }
+  initState(selectDate) {
+    let selectObj = new Date(selectDate),
       selectYear = selectObj.getFullYear().toString(),
       selectMonth = selectObj.getMonth().toString();
 
-    this.state = {
+    return {
       datePickerState: 0,
       displayDate: true,
       displayMonth: false,
