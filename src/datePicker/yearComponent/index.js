@@ -13,6 +13,7 @@ class YearComponent extends React.Component {
       let preYear = parseInt(start) - 1;
       result.push({
         id: preYear,
+        disable: true,
         className: [styles.disable],
         text: preYear,
       });
@@ -26,6 +27,7 @@ class YearComponent extends React.Component {
 
         result.push({
           id: current,
+          disable: false,
           className: className,
           text: current,
         });
@@ -35,11 +37,19 @@ class YearComponent extends React.Component {
       let nextYear = parseInt(end) + 1;
       result.push({
         id: nextYear,
+        disable: true,
         className: [styles.disable],
         text: nextYear,
       });
 
       return result;
+    };
+
+    const handleClick = (data) => {
+      if (data.disable) {
+        return;
+      }
+      this.props.onSelect(data.text);
     };
 
     return (
@@ -48,7 +58,7 @@ class YearComponent extends React.Component {
           <li
             key={year.id}
             className={year.className.join(" ")}
-            onClick={() => this.props.onSelect(year.text)}
+            onClick={() => handleClick(year)}
           >
             {year.text}
           </li>

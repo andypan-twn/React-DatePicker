@@ -6,6 +6,7 @@ import DateComponent from "./dateComponent";
 import MonthComponent from "./monthComponent";
 import YearComponent from "./yearComponent";
 import HeaderComponent from "./headerComponent";
+import { NumToTwoDigitStr } from "./utils/numToTwoDigitStr";
 
 class DatePicker extends React.Component {
   constructor(props) {
@@ -15,17 +16,25 @@ class DatePicker extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    let isPropsUpdate = this.props.selectDate !== prevProps.selectDate;
-    if (isPropsUpdate) {
-      if (isNaN(new Date(this.props.selectDate).getTime())) {
-        return;
-      }
+    let unlessPropsUpdate = this.props.selectDate === prevProps.selectDate;
+    if (unlessPropsUpdate) {
+      return;
+    }
+    if (isNaN(new Date(this.props.selectDate).getTime())) {
+      this.setState(this.initState("")); //Invalid input text.
+    } else {
       this.setState(this.initState(this.props.selectDate));
     }
   }
   initState(selectDate) {
-    let selectObj = new Date(selectDate),
-      selectYear = selectObj.getFullYear().toString(),
+    let selectObj;
+    if (selectDate == "") {
+      selectObj = new Date();
+    } else {
+      selectObj = new Date(selectDate);
+    }
+
+    let selectYear = selectObj.getFullYear().toString(),
       selectMonth = selectObj.getMonth().toString();
 
     return {
@@ -33,8 +42,6 @@ class DatePicker extends React.Component {
       displayDate: true,
       displayMonth: false,
       displayYear: false,
-      selectYear: selectYear,
-      selectMonth: selectMonth,
       dateProps: {
         year: selectYear,
         month: selectMonth,
@@ -100,8 +107,8 @@ class DatePicker extends React.Component {
   processYear(year) {
     this.setState((state) => {
       state.dateProps.year = year.toString();
-      if (year == state.selectYear) {
-        state.monthProps.select = state.selectMonth;
+      if (year == state.yearProps.select) {
+        state.monthProps.select = state.dateProps.month;
       } else {
         state.monthProps.select = "";
       }
@@ -168,14 +175,15 @@ class DatePicker extends React.Component {
     const onSelectDate = (date) => {
       this.setState(
         (state) => {
-          state.selectYear = state.dateProps.year;
-          state.yearProps.select = state.dateProps.year;
-          state.selectMonth = state.dateProps.month;
-          state.monthProps.select = state.dateProps.month;
+          let year = state.dateProps.year,
+            month = state.dateProps.month;
+
+          state.yearProps.select = year;
+          state.monthProps.select = month;
           state.dateProps.select = [
-            state.dateProps.year,
-            parseInt(state.dateProps.month) + 1,
-            date,
+            year,
+            NumToTwoDigitStr(parseInt(month) + 1),
+            NumToTwoDigitStr(date),
           ].join("-");
 
           return state;
