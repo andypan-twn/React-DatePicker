@@ -1,4 +1,4 @@
-export const NumToTwoDigitStr = (num) => {
+export const numToTwoDigitStr = (num) => {
   if (parseInt(num) < 10) {
     return "0" + num;
   } else {
@@ -6,4 +6,4 @@ export const NumToTwoDigitStr = (num) => {
   }
 };
 
-export default NumToTwoDigitStr;
+export default numToTwoDigitStr;

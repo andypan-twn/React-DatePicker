@@ -1,4 +1,4 @@
-export const MonthStr = [
+export const monthStr = [
   "Jan",
   "Feb",
   "Mar",
@@ -13,4 +13,4 @@ export const MonthStr = [
   "Dec",
 ];
 
-export default MonthStr;
+export default monthStr;
