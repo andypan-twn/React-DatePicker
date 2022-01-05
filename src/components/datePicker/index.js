@@ -1,5 +1,5 @@
 "use strict";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./datePicker.module.scss";
 import DateComponent from "./dateComponent";
@@ -8,32 +8,25 @@ import YearComponent from "./yearComponent";
 import HeaderComponent from "./HeaderComponent";
 import { numToTwoDigitStr } from "./utils/numToTwoDigitStr";
 
-const initState = (selectDate) => {
-  let selectObj;
-  if (selectDate) {
-    selectObj = new Date(selectDate);
-  } else {
-    selectObj = new Date();
+const initState = (selectDate = "") => {
+  let selectDateObj = new Date(selectDate);
+  if (isNaN(selectDateObj.getTime())) {
+    selectDateObj = new Date(); //Invalid input text.
   }
 
-  let selectYear = selectObj.getFullYear().toString(),
-    selectMonth = selectObj.getMonth().toString();
+  let selectYear = selectDateObj.getFullYear().toString(),
+    selectMonth = selectDateObj.getMonth().toString();
 
   return {
-    datePickerState: 0,
-    displayDate: true,
-    displayMonth: false,
-    displayYear: false,
-    closeSelf: false,
-    dateProps: {
+    datePropsData: {
       year: selectYear,
       month: selectMonth,
       select: selectDate,
     },
-    monthProps: {
+    monthPropsData: {
       select: selectMonth,
     },
-    yearProps: {
+    yearPropsData: {
       start: selectYear.slice(0, 3) + "0",
       end: selectYear.slice(0, 3) + "9",
       select: selectYear,
@@ -41,223 +34,159 @@ const initState = (selectDate) => {
   };
 };
 
-const processDisplayStatus = (status) => {
-  if (status >= 3) {
-    return;
-  }
-  let displayDate,
-    displayMonth,
-    displayYear = false;
+const DatePicker = ({ selectDate, onSelect }) => {
+  const [displayStatus, setDisplayStatus] = useState(0);
+  const [displayComponent, setDisplayComponent] = useState({
+    date: true,
+    month: false,
+    year: false,
+  });
+  useEffect(() => {
+    let newDisplay = { date: false, month: false, year: false };
 
-  switch (status) {
-    case 0:
-      displayDate = true;
-      break;
-    case 1:
-      displayMonth = true;
-      break;
-    case 2:
-      displayYear = true;
-      break;
-  }
+    switch (displayStatus) {
+      case 0:
+        newDisplay.date = true;
+        break;
+      case 1:
+        newDisplay.month = true;
+        break;
+      case 2:
+        newDisplay.year = true;
+        break;
+    }
+    setDisplayComponent(newDisplay);
+  }, [displayStatus]);
 
-  return {
-    datePickerState: status,
-    displayDate: displayDate,
-    displayMonth: displayMonth,
-    displayYear: displayYear,
-  };
-};
+  const { datePropsData, monthPropsData, yearPropsData } = initState();
+  const [dateProps, setDateProps] = useState(datePropsData);
+  const [monthProps, setMonthProps] = useState(monthPropsData);
+  const [yearProps, setYearProps] = useState(yearPropsData);
 
-const processMonth = (inputMonth, dateProps) => {
-  let month, year;
+  useEffect(() => {
+    const { datePropsData, monthPropsData, yearPropsData } =
+      initState(selectDate);
 
-  if (inputMonth < 0) {
-    month = "11";
-    year = (parseInt(dateProps.year) - 1).toString();
-  } else if (inputMonth > 11) {
-    month = "0";
-    year = (parseInt(dateProps.year) + 1).toString();
-  } else {
-    month = inputMonth.toString();
-    year = dateProps.year;
-  }
+    setDateProps(datePropsData);
+    setMonthProps(monthPropsData);
+    setYearProps(yearPropsData);
+  }, [selectDate]);
 
-  return {
-    dateProps: {
+  const processMonth = (inputMonth) => {
+    let month, year;
+
+    if (inputMonth < 0) {
+      month = "11";
+      year = (parseInt(dateProps.year) - 1).toString();
+    } else if (inputMonth > 11) {
+      month = "0";
+      year = (parseInt(dateProps.year) + 1).toString();
+    } else {
+      month = inputMonth.toString();
+      year = dateProps.year;
+    }
+
+    setDateProps({
       ...dateProps,
       month: month,
       year: year,
-    },
+    });
   };
-};
 
-const processYear = (inputYear, yearProps, dateProps) => {
-  return {
-    dateProps: {
+  const processYear = (inputYear) => {
+    setDateProps({
       ...dateProps,
       year: inputYear.toString(),
-    },
-    monthProps: {
+    });
+
+    setMonthProps({
       select: yearProps.select === inputYear ? dateProps.month : "",
-    },
+    });
   };
-};
 
-const processTenYear = (input, yearProps) => {
-  if (input <= 99 || input >= 1000) {
-    return;
-  }
+  const processTenYear = (input) => {
+    if (input <= 99 || input >= 1000) {
+      return;
+    }
 
-  return {
-    yearProps: {
+    setYearProps({
       ...yearProps,
       start: `${input}0`,
       end: `${input}9`,
-    },
+    });
   };
-};
-
-const DatePicker = ({ selectDate, onSelect }) => {
-  const [state, setState] = useState(initState(selectDate));
-  const {
-    datePickerState,
-    displayDate,
-    displayMonth,
-    displayYear,
-    dateProps,
-    monthProps,
-    yearProps,
-  } = state;
-
-  useEffect(() => {
-    if (isNaN(new Date(selectDate).getTime())) {
-      setState(initState("")); //Invalid input text.
-    } else {
-      setState(initState(selectDate));
-    }
-  }, [selectDate]);
-
-  useEffect(() => {
-    return () => onSelect(state.dateProps.select);
-  }, [state.dateProps.select]);
 
   const preBtnClick = () => {
-    let newState;
-
-    switch (datePickerState) {
+    switch (displayStatus) {
       case 0:
-        newState = processMonth(parseInt(dateProps.month) - 1, dateProps);
+        processMonth(parseInt(dateProps.month) - 1);
         break;
       case 1:
-        newState = processYear(
-          parseInt(dateProps.year) - 1,
-          yearProps,
-          dateProps
-        );
+        processYear(parseInt(dateProps.year) - 1);
         break;
       case 2:
-        newState = processTenYear(
-          parseInt(yearProps.start.slice(0, 3)) - 1,
-          yearProps
-        );
+        processTenYear(parseInt(yearProps.start.slice(0, 3)) - 1);
         break;
     }
-
-    setState({
-      ...state,
-      ...newState,
-    });
   };
 
   const nextBtnClick = () => {
-    let newState;
-
-    switch (datePickerState) {
+    switch (displayStatus) {
       case 0:
-        newState = processMonth(parseInt(dateProps.month) + 1, dateProps);
+        processMonth(parseInt(dateProps.month) + 1);
         break;
       case 1:
-        newState = processYear(
-          parseInt(dateProps.year) + 1,
-          yearProps,
-          dateProps
-        );
+        processYear(parseInt(dateProps.year) + 1);
         break;
       case 2:
-        newState = processTenYear(
-          parseInt(yearProps.start.slice(0, 3)) + 1,
-          yearProps
-        );
+        processTenYear(parseInt(yearProps.start.slice(0, 3)) + 1);
         break;
     }
-
-    setState({
-      ...state,
-      ...newState,
-    });
-  };
-
-  const yearBtnClick = () => {
-    const displayStatus = processDisplayStatus(datePickerState + 1);
-
-    setState({
-      ...state,
-      ...displayStatus,
-    });
   };
 
   const onSelectDate = (date) => {
-    const { year, month } = state.dateProps;
+    const { year, month } = dateProps;
     const datePropsSelect = [
       year,
       numToTwoDigitStr(parseInt(month) + 1),
       numToTwoDigitStr(date),
     ].join("-");
 
-    setState({
-      ...state,
-      closeSelf: true,
-      dateProps: {
-        year: year,
-        month: month,
-        select: datePropsSelect,
-      },
-      monthProps: {
-        select: month,
-      },
-      yearProps: {
-        ...state.yearProps,
-        select: year,
-      },
+    setDateProps({
+      year: year,
+      month: month,
+      select: datePropsSelect,
     });
+    setMonthProps({
+      select: month,
+    });
+    setYearProps({
+      ...yearProps,
+      select: year,
+    });
+
+    onSelect(datePropsSelect);
   };
 
   const onSelectMonth = (month) => {
-    const displayStatus = processDisplayStatus(datePickerState - 1);
+    setDisplayStatus(displayStatus - 1);
 
-    setState({
-      ...state,
-      ...displayStatus,
-      dateProps: {
-        ...state.dateProps,
-        month: month.toString(),
-      },
+    setDateProps({
+      ...dateProps,
+      month: month.toString(),
     });
   };
 
   const onSelectYear = (year) => {
-    const displayStatus = processDisplayStatus(datePickerState - 1);
-    const displayYear = processYear(parseInt(year), yearProps, dateProps);
+    setDisplayStatus(displayStatus - 1);
 
-    setState({
-      ...state,
-      ...displayStatus,
-      ...displayYear,
-      dateProps: {
-        ...state.dateProps,
-        year: year.toString(),
-      },
+    setDateProps({
+      ...dateProps,
+      year: year.toString(),
+    });
+
+    setMonthProps({
+      select: yearProps.select === year ? dateProps.month : "",
     });
   };
 
@@ -267,29 +196,34 @@ const DatePicker = ({ selectDate, onSelect }) => {
         <div className={styles.btn} onClick={preBtnClick}>
           &lt;
         </div>
-        <div className={styles.info} onClick={yearBtnClick}>
+        <div
+          className={styles.info}
+          onClick={() =>
+            displayStatus < 2 && setDisplayStatus(displayStatus + 1)
+          }
+        >
           <HeaderComponent
             start={yearProps.start}
             end={yearProps.end}
             year={dateProps.year}
             month={dateProps.month}
-            displayState={datePickerState}
+            displayState={displayStatus}
           ></HeaderComponent>
         </div>
         <div className={styles.btn} onClick={nextBtnClick}>
           &gt;
         </div>
       </div>
-      {displayDate && (
+      {displayComponent.date && (
         <DateComponent {...dateProps} onSelect={onSelectDate}></DateComponent>
       )}
-      {displayMonth && (
+      {displayComponent.month && (
         <MonthComponent
           {...monthProps}
           onSelect={onSelectMonth}
         ></MonthComponent>
       )}
-      {displayYear && (
+      {displayComponent.year && (
         <YearComponent {...yearProps} onSelect={onSelectYear}></YearComponent>
       )}
     </section>
