@@ -3,59 +3,55 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./year.module.scss";
 
-const yearList = (start, end, select) => {
-  let result = [];
+const YearComponent = ({ onSelect, ...props }) => {
+  const yearList = () => {
+    const start = parseInt(props.start);
+    const end = parseInt(props.end);
+    const select = parseInt(props.select);
+    let result = [];
 
-  let preYear = parseInt(start) - 1;
-  result.push({
-    id: preYear,
-    disable: true,
-    className: [styles.disable],
-    text: preYear,
-  });
-
-  let current = start;
-  while (current <= end) {
-    let className = [];
-    if (current == select) {
-      className = [styles.select];
-    }
-
+    const preYear = start - 1;
     result.push({
-      id: current,
-      disable: false,
-      className: className,
-      text: current,
+      id: preYear,
+      disable: true,
+      className: styles.disable,
+      text: preYear,
     });
-    current++;
-  }
 
-  let nextYear = parseInt(end) + 1;
-  result.push({
-    id: nextYear,
-    disable: true,
-    className: [styles.disable],
-    text: nextYear,
-  });
+    let current = start;
+    while (current <= end) {
+      let className = "";
+      if (current === select) {
+        className = styles.select;
+      }
 
-  return result;
-};
-
-const YearComponent = ({ start, end, select, onSelect }) => {
-  const handleClick = (data) => {
-    if (data.disable) {
-      return;
+      result.push({
+        id: current,
+        disable: false,
+        className: className,
+        text: current,
+      });
+      current++;
     }
-    onSelect(data.text);
+
+    const nextYear = end + 1;
+    result.push({
+      id: nextYear,
+      disable: true,
+      className: styles.disable,
+      text: nextYear,
+    });
+
+    return result;
   };
 
   return (
     <ul className={styles.year}>
-      {yearList(start, end, select).map((year) => (
+      {yearList().map((year) => (
         <li
           key={year.id}
-          className={year.className.join(" ")}
-          onClick={() => handleClick(year)}
+          className={year.className}
+          onClick={() => year.disable || onSelect(year.text)}
         >
           {year.text}
         </li>
@@ -73,6 +69,7 @@ YearComponent.propTypes = {
 
 YearComponent.defaultProps = {
   select: "",
+  onSelect: () => {},
 };
 
 export default YearComponent;
