@@ -4,33 +4,34 @@ import PropTypes from "prop-types";
 import styles from "./month.module.scss";
 import { monthStr } from "../utils/monthStr.js";
 
-const monthList = (select) => {
-  let result = [],
-    month = 0;
-
-  while (month < 12) {
-    let className = "";
-    if (select === month.toString()) {
-      className = "select";
-    }
-    result.push({
-      className: className,
-      text: monthStr[month],
-    });
-    month++;
-  }
-
-  return result;
-};
-
 const MonthComponent = ({ select, onSelect }) => {
+  const monthList = () => {
+    let result = [],
+      month = 0;
+
+    while (month < 12) {
+      let className = "";
+      if (select === month.toString()) {
+        className = "select";
+      }
+      result.push({
+        id: month,
+        className: className,
+        text: monthStr[month],
+      });
+      month++;
+    }
+
+    return result;
+  };
+
   return (
     <ul className={styles.month}>
-      {monthList(select).map((month, index) => (
+      {monthList().map((month) => (
         <li
-          key={index}
+          key={month.id}
           className={styles[month.className]}
-          onClick={() => onSelect(index)}
+          onClick={() => onSelect(month.id)}
         >
           {month.text}
         </li>
@@ -46,6 +47,7 @@ MonthComponent.propTypes = {
 
 MonthComponent.defaultProps = {
   select: "",
+  onSelect: () => {},
 };
 
 export default MonthComponent;
