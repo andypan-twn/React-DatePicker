@@ -6,133 +6,127 @@ import WeekComponent from "./WeekComponent";
 
 const DATE_LENGTH = 7 * 6;
 
-const preDateList = (year, month) => {
-  let firstDateOfMonth = new Date(year, month, 1),
-    preMonth = parseInt(month) - 1,
-    diff = firstDateOfMonth.getDay(); // return day of the week
+const DateComponent = ({ select, onSelect, ...props }) => {
+  const year = parseInt(props.year);
+  const month = parseInt(props.month);
 
-  let result = [];
-  while (diff > 0) {
-    let preDate = new Date(year, preMonth, 1 - diff);
-    let date = preDate.getDate();
+  const preDateList = () => {
+    const firstDateOfMonth = new Date(year, month, 1);
+    const preMonth = month - 1;
 
-    result.push({
-      id: `${preMonth}_${date}`,
-      disable: true,
-      className: styles.disable,
-      text: date,
-    });
+    let diff = firstDateOfMonth.getDay(); // return day of the week
+    let result = [];
+    while (diff > 0) {
+      const preDate = new Date(year, preMonth, 1 - diff);
+      const date = preDate.getDate();
 
-    diff--;
-  }
+      result.push({
+        id: `${preMonth}_${date}`,
+        disable: true,
+        className: styles.disable,
+        text: date,
+      });
 
-  return result;
-};
-
-const thisDateList = (year, month, selectDate, isSelectThisMonth) => {
-  let today = new Date(),
-    todayOfYear = today.getFullYear(),
-    todayOfMonth = today.getMonth(),
-    todayOfDate = today.getDate();
-
-  let lastOfDate = new Date(year, parseInt(month) + 1, 0).getDate();
-
-  let checkTodayOfDate = false;
-  if (todayOfYear == year && todayOfMonth == month) {
-    checkTodayOfDate = true;
-  }
-
-  let result = [];
-  let dateInfo = 1;
-  while (dateInfo <= lastOfDate) {
-    let classNameArr = [];
-    if (checkTodayOfDate && todayOfDate == dateInfo) {
-      classNameArr.push(styles.today);
-    }
-    if (isSelectThisMonth && selectDate == dateInfo) {
-      classNameArr.push(styles.select);
+      diff--;
     }
 
-    result.push({
-      id: `${month}_${dateInfo}`,
-      disable: false,
-      className: classNameArr.join(" "),
-      text: dateInfo,
-    });
-
-    dateInfo++;
-  }
-
-  return result;
-};
-
-const dataList = (year, month, selectDate, isSelectThisMonth) => {
-  let result = [
-    ...preDateList(year, month),
-    ...thisDateList(year, month, selectDate, isSelectThisMonth),
-  ];
-
-  let lessLength = DATE_LENGTH - result.length;
-
-  let nextDate = 1;
-  while (lessLength > 0) {
-    result.push({
-      id: `${parseInt(month) + 1}_${nextDate}`,
-      disable: true,
-      className: styles.disable,
-      text: nextDate,
-    });
-
-    nextDate++;
-    lessLength--;
-  }
-
-  return result;
-};
-
-const processSelect = (y, m, select) => {
-  let selectObj = new Date(select),
-    selectYear = selectObj.getFullYear(),
-    selectDate = selectObj.getDate(),
-    isSelectThisYear = selectYear == y,
-    isSelectThisMonth = false;
-
-  if (isSelectThisYear) {
-    let selectMonth = selectObj.getMonth();
-
-    isSelectThisMonth = selectMonth == m;
-  }
-
-  return {
-    selectDate: selectDate,
-    isSelectThisMonth: isSelectThisMonth,
+    return result;
   };
-};
 
-const DateComponent = ({ year, month, select, onSelect }) => {
-  const [state, setState] = useState(processSelect(year, month, select));
-  const { selectDate, isSelectThisMonth } = state;
+  const thisDateList = () => {
+    const today = new Date(),
+      todayOfYear = today.getFullYear(),
+      todayOfMonth = today.getMonth(),
+      todayOfDate = today.getDate();
+
+    const lastOfDate = new Date(year, month + 1, 0).getDate();
+
+    let checkTodayOfDate = false;
+    if (todayOfYear === year && todayOfMonth === month) {
+      checkTodayOfDate = true;
+    }
+
+    let result = [];
+    let dateInfo = 1;
+    while (dateInfo <= lastOfDate) {
+      let classNameArr = [];
+      if (checkTodayOfDate && todayOfDate === dateInfo) {
+        classNameArr.push(styles.today);
+      }
+      if (
+        selectState.isSelectThisMonth &&
+        selectState.selectDate === dateInfo
+      ) {
+        classNameArr.push(styles.select);
+      }
+
+      result.push({
+        id: `${month}_${dateInfo}`,
+        disable: false,
+        className: classNameArr.join(" "),
+        text: dateInfo,
+      });
+
+      dateInfo++;
+    }
+
+    return result;
+  };
+
+  const dataList = () => {
+    let result = [...preDateList(), ...thisDateList()];
+
+    let lessLength = DATE_LENGTH - result.length;
+
+    let nextDate = 1;
+    while (lessLength > 0) {
+      result.push({
+        id: `${month + 1}_${nextDate}`,
+        disable: true,
+        className: styles.disable,
+        text: nextDate,
+      });
+
+      nextDate++;
+      lessLength--;
+    }
+
+    return result;
+  };
+
+  const processSelect = () => {
+    const selectObj = new Date(select),
+      selectYear = selectObj.getFullYear(),
+      selectDate = selectObj.getDate();
+    let isSelectThisMonth = false;
+
+    if (selectYear === year) {
+      let selectMonth = selectObj.getMonth();
+
+      isSelectThisMonth = selectMonth === month;
+    }
+
+    return {
+      selectDate: selectDate,
+      isSelectThisMonth: isSelectThisMonth,
+    };
+  };
+
+  const [selectState, setSelectState] = useState(processSelect());
 
   useEffect(() => {
-    setState(processSelect(year, month, select));
+    setSelectState(processSelect());
   }, [month, select]);
-
-  const handleClick = (data) => {
-    if (data.disable) {
-      return;
-    }
-    onSelect(data.text);
-  };
 
   return (
     <>
       <WeekComponent />
       <ul className={styles.day}>
-        {dataList(year, month, selectDate, isSelectThisMonth).map((data) => (
+        {dataList().map((data) => (
           <li
             key={data.id}
             className={data.className}
-            onClick={() => handleClick(data)}
+            onClick={() => data.disable || onSelect(data.text)}
           >
             {data.text}
           </li>
@@ -143,16 +137,15 @@ const DateComponent = ({ year, month, select, onSelect }) => {
 };
 
 DateComponent.propTypes = {
-  year: PropTypes.string,
-  month: PropTypes.string,
+  year: PropTypes.string.isRequired,
+  month: PropTypes.string.isRequired,
   select: PropTypes.string,
   onSelect: PropTypes.func,
 };
 
 DateComponent.defaultProps = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth(),
   select: "",
+  onSelect: () => {},
 };
 
 export default DateComponent;
