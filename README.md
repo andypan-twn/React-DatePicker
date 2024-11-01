@@ -73,26 +73,60 @@
 
 1. install npm package
 
-   ```
+   ```bash
    $ npm i
    ```
 
    - NOTE: Be careful with any errors message!
 
 2. run local server
-   ```
+
+   ```bash
    $ npm run serve
    ```
+
 3. use `http://localhost:3000/` on your browser
 
 #### Build on local
 
 1. install npm package
-   ```
+
+   ```bash
    $ npm i
    ```
+
    - NOTE: Be careful with any errors message!
-2. run local server
-   ```
+
+2. run build
+
+   ```bash
    $ npm run build
    ```
+
+### Develop - Docker mode
+
+#### Requirement
+
+- [docker.desktop](https://www.docker.com/products/docker-desktop/)
+
+#### Start to develop
+
+- Start and run local server
+
+  ```bash
+  $ docker-compose up -d
+  ```
+
+  - use `http://localhost:3000/` on your browser
+
+- Exec
+
+  ```bash
+  $ docker exec -it react_datepicker-client /bin/bash
+  ```
+
+- Close
+
+  ```bash
+  $ docker-compose down
+  ```

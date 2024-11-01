@@ -1,0 +1,19 @@
+name: react_datepicker
+
+services:
+  client:
+    container_name: react_datepicker-client
+    networks:
+      - LAN
+    build:
+      context: .
+    user: 1000:1000 #UID:GID
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/react-datepicker
+
+networks:
+  LAN:
+    driver: bridge
+    name: react_datepicker
