@@ -130,3 +130,23 @@
   ```bash
   $ docker-compose down
   ```
+
+#### Run test
+
+1. build and run docker
+
+   ```bash
+   $ docker-compose up -d
+   ```
+
+2. exec bash on docker
+
+   ```bash
+   $ docker exec -it react_datepicker-client /bin/bash
+   ```
+
+3. run test
+
+   ```bash
+   $ npm run test
+   ```
