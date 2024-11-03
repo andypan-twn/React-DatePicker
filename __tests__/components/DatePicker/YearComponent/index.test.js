@@ -2,7 +2,7 @@ import React from "react";
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import YearComponent from "~/src/components/datePicker/YearComponent";
+import YearComponent from "~/src/components/DatePicker/YearComponent";
 
 describe("Test YearComponent", () => {
   test("have default props and no error", () => {

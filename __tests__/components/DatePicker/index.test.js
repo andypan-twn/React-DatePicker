@@ -2,7 +2,7 @@ import React from "react";
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import DatePicker from "~/src/components/datePicker";
+import DatePicker from "~/src/components/DatePicker";
 
 describe("Test DatePicker component", () => {
   test("have default props and no error", () => {

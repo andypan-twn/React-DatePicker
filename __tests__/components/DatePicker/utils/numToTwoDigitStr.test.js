@@ -1,4 +1,4 @@
-import numToTwoDigitStr from "~/src/components/datePicker/utils/numToTwoDigitStr";
+import numToTwoDigitStr from "~/src/components/DatePicker/utils/numToTwoDigitStr";
 
 describe("Test numToTwoDigitStr utils", () => {
   test("0 return '00'", () => {

@@ -2,7 +2,7 @@ import React from "react";
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import MonthComponent from "~/src/components/datePicker/MonthComponent";
+import MonthComponent from "~/src/components/DatePicker/MonthComponent";
 
 describe("Test MonthComponent", () => {
   test("have default props and no error", () => {
