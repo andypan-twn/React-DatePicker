@@ -4,13 +4,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import MonthComponent from "~/src/components/DatePicker/MonthComponent";
 
-describe("Test MonthComponent", () => {
-  test("have default props and no error", () => {
+describe("Test MonthComponent Component", () => {
+  test("Component Renders with Default Props and No Errors", () => {
     render(<MonthComponent />);
     fireEvent.click(screen.queryByText("Jan"));
   });
 
-  test("should have Jan - Dec", () => {
+  test("Should have Jan - Dec elements", () => {
     render(<MonthComponent />);
 
     expect(screen.queryByText("Jan")).toBeInTheDocument();
@@ -27,13 +27,13 @@ describe("Test MonthComponent", () => {
     expect(screen.queryByText("Dec")).toBeInTheDocument();
   });
 
-  test("select item should have selected class", () => {
+  test("Select month element should have 'selected' class name", () => {
     render(<MonthComponent select="0" />);
 
     expect(screen.getByText("Jan")).toHaveClass("select");
   });
 
-  test("click item should trigger onSelect", () => {
+  test("Click element should trigger onSelect prop", () => {
     const mockFunc = jest.fn();
     render(<MonthComponent onSelect={mockFunc} />);
 

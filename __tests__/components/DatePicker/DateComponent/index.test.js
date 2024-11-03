@@ -4,13 +4,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import DateComponent from "~/src/components/DatePicker/DateComponent";
 
-describe("Test DateComponent", () => {
-  test("have default props and no error", () => {
+describe("Test DateComponent Component", () => {
+  test("Component Renders with Default Props and No Errors", () => {
     render(<DateComponent year="2000" month="0" />);
     fireEvent.click(screen.queryAllByText("1")[0]);
   });
 
-  test("Jan should have 1 - 31", () => {
+  test("January should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="0" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -18,7 +18,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("february should have 1 - 28", () => {
+  test("February should have elements from 1 to 28", () => {
     render(<DateComponent year="2000" month="1" />);
 
     for (let i = 1; i <= 28; i++) {
@@ -26,13 +26,15 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("leap february should have 1 - 29", () => {
+  test("Leap February should have elements from 1 to 29", () => {
     render(<DateComponent year="2004" month="1" />);
 
-    expect(screen.getByText("29")).not.toHaveClass("disable");
+    for (let i = 1; i <= 29; i++) {
+      expect(screen.queryAllByText(i.toString())[0]).toBeInTheDocument();
+    }
   });
 
-  test("Mar should have 1 - 31", () => {
+  test("March should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="2" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -40,7 +42,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Apr should have 1 - 30", () => {
+  test("April should have elements from 1 to 30", () => {
     render(<DateComponent year="2000" month="3" />);
 
     for (let i = 1; i <= 30; i++) {
@@ -48,7 +50,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("May should have 1 - 31", () => {
+  test("May should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="4" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -56,7 +58,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Jun should have 1 - 30", () => {
+  test("June should have elements from 1 to 30", () => {
     render(<DateComponent year="2000" month="5" />);
 
     for (let i = 1; i <= 30; i++) {
@@ -64,7 +66,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Jul should have 1 - 31", () => {
+  test("July should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="6" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -72,7 +74,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Aug should have 1 - 31", () => {
+  test("August should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="7" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -80,7 +82,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Sep should have 1 - 30", () => {
+  test("September should have elements from 1 to 30", () => {
     render(<DateComponent year="2000" month="8" />);
 
     for (let i = 1; i <= 30; i++) {
@@ -88,7 +90,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Oct should have 1 - 31", () => {
+  test("October should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="9" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -96,7 +98,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Nov should have 1 - 30", () => {
+  test("November should have elements from 1 to 30", () => {
     render(<DateComponent year="2000" month="10" />);
 
     for (let i = 1; i <= 30; i++) {
@@ -104,7 +106,7 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("Dec should have 1 - 31", () => {
+  test("December should have elements from 1 to 31", () => {
     render(<DateComponent year="2000" month="11" />);
 
     for (let i = 1; i <= 31; i++) {
@@ -112,13 +114,13 @@ describe("Test DateComponent", () => {
     }
   });
 
-  test("select item should have selected class", () => {
+  test("Select day element should have 'selected' class name", () => {
     render(<DateComponent year="2000" month="0" select="2000-01-01" />);
 
     expect(screen.queryAllByText("1")[0]).toHaveClass("select");
   });
 
-  test("today should have today class", () => {
+  test("If day element is the current day should have 'today' class name", () => {
     const d = new Date();
     const { container, rerender } = render(
       <DateComponent
@@ -127,10 +129,12 @@ describe("Test DateComponent", () => {
       />
     );
 
-    expect(container.querySelector("ul.day li.today")).toHaveClass("today");
+    expect(container.querySelector("ul.day li.today")).toHaveTextContent(
+      d.getDate()
+    );
   });
 
-  test("click item should trigger onSelect", () => {
+  test("Click element should trigger onSelect prop", () => {
     const mockFunc = jest.fn();
     render(<DateComponent year="2000" month="0" onSelect={mockFunc} />);
 
