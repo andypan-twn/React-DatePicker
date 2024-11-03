@@ -1,5 +1,7 @@
 # React Date Picker
 
+Live Demo: https://andypan-twn.github.io/React-DatePicker/
+
 ### Requirement
 
 - browser:
