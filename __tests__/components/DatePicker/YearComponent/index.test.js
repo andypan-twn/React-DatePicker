@@ -4,13 +4,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import YearComponent from "~/src/components/DatePicker/YearComponent";
 
-describe("Test YearComponent", () => {
-  test("have default props and no error", () => {
+describe("Test YearComponent Component", () => {
+  test("Component Renders with Default Props and No Errors", () => {
     render(<YearComponent start="2000" end="2009" />);
     fireEvent.click(screen.queryByText("2000"));
   });
 
-  test("start 2000, end 2009 should have 1999 - 2010", () => {
+  test("Props of start 2000, end 2009 should have 1999 - 2010 elements", () => {
     render(<YearComponent start="2000" end="2009" />);
 
     expect(screen.queryByText("1998")).not.toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("Test YearComponent", () => {
     expect(screen.queryByText("2011")).not.toBeInTheDocument();
   });
 
-  test("active li should trigger onSelect", () => {
+  test("Click active li element should trigger onSelect props including year info", () => {
     let selectedYear = "";
     const selectFunc = (year) => {
       selectedYear = year;
@@ -48,7 +48,7 @@ describe("Test YearComponent", () => {
     expect(selectedYear).toBe(2009);
   });
 
-  test("disable li should not trigger onSelect", () => {
+  test("Click disabled li element should not trigger onSelect props", () => {
     const mockFunc = jest.fn();
     render(<YearComponent start="2000" end="2009" onSelect={mockFunc} />);
 
@@ -59,13 +59,13 @@ describe("Test YearComponent", () => {
     expect(mockFunc).toBeCalledTimes(0);
   });
 
-  test("select li should have select class name", () => {
+  test("Select of li element should have 'select' class name", () => {
     render(<YearComponent start="2000" end="2009" select="2001" />);
 
     expect(screen.getByText("2001")).toHaveClass("select");
   });
 
-  test("overflow li should have disable class name", () => {
+  test("Overflow li element should have 'disable' class name", () => {
     render(<YearComponent start="2000" end="2009" />);
 
     expect(screen.getByText("1999")).toHaveClass("disable");
