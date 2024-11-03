@@ -1,0 +1,14 @@
+.week {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+
+  span {
+    display: flex;
+    flex: 0 0 14%;
+    justify-content: center;
+  }
+}
