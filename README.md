@@ -1,8 +1,12 @@
-# React Date Picker
+# React - Date Picker
 
-Live Demo: https://andypan-twn.github.io/React-DatePicker/
+The sample code of the date picker uses ReactJS.
 
-### Requirement
+## Live Demo
+
+https://andypan-twn.github.io/React-DatePicker/
+
+## Requirement
 
 - browser:
   - Chrome
@@ -10,12 +14,7 @@ Live Demo: https://andypan-twn.github.io/React-DatePicker/
   - Firefox
   - Internet Explorer 11
 
-### How to use
-
-1. open `/index.html` or `/dist/index.html` file on your browser
-2. enjoy!
-
-### All Of Component Props Detail
+## All Of Component Props Detail
 
 1. `<DatePicker>` - entry component.
 
@@ -65,13 +64,13 @@ Live Demo: https://andypan-twn.github.io/React-DatePicker/
    | ---- | ---- | ------- | ----------- |
    | N/A  | N/A  | N/A     | N/A         |
 
-### Develop
+## Develop
 
-#### Requirement
+### Requirement
 
 - node.js: 10.x
 
-#### Start to develop
+### Start to develop
 
 1. install npm package
 
@@ -89,7 +88,7 @@ Live Demo: https://andypan-twn.github.io/React-DatePicker/
 
 3. use `http://localhost:3000/` on your browser
 
-#### Build on local
+### Build on local
 
 1. install npm package
 
@@ -105,13 +104,13 @@ Live Demo: https://andypan-twn.github.io/React-DatePicker/
    $ npm run build
    ```
 
-### Develop - Docker mode
+## Develop - Docker mode
 
-#### Requirement
+### Requirement
 
 - [docker.desktop](https://www.docker.com/products/docker-desktop/)
 
-#### Start to develop
+### Start to develop
 
 - Start and run local server
 
@@ -133,7 +132,7 @@ Live Demo: https://andypan-twn.github.io/React-DatePicker/
   $ docker-compose down
   ```
 
-#### Run test
+### Run test
 
 1. build and run docker
 
