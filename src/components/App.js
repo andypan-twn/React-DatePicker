@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DatePicker from "./datePicker";
+import DatePicker from "./DatePicker";
 
 const App = () => {
   const [displayDatePicker, setDisplayDatePicker] = useState(false);

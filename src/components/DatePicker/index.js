@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./datePicker.module.scss";
-import DateComponent from "./dateComponent";
-import MonthComponent from "./monthComponent";
-import YearComponent from "./yearComponent";
+import DateComponent from "./DateComponent";
+import MonthComponent from "./MonthComponent";
+import YearComponent from "./YearComponent";
 import HeaderComponent from "./HeaderComponent";
 import { numToTwoDigitStr } from "./utils/numToTwoDigitStr";
 
