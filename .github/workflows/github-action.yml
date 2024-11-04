@@ -47,6 +47,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run Test
+        run: npm run test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Build
         run: npm run build
 

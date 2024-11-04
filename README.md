@@ -1,5 +1,7 @@
 # React - Date Picker
 
+[![codecov](https://codecov.io/github/andypan-twn/React-DatePicker/graph/badge.svg?token=RZR7XVD1I6)](https://codecov.io/github/andypan-twn/React-DatePicker)
+
 The sample code of the date picker uses ReactJS.
 
 ## Live Demo
