@@ -100,7 +100,7 @@ const DatePicker = ({ selectDate, onSelect }) => {
     });
 
     setMonthProps({
-      select: yearProps.select === inputYear ? dateProps.month : "",
+      select: yearProps.select === inputYear.toString() ? dateProps.month : "",
     });
   };
 
@@ -186,7 +186,7 @@ const DatePicker = ({ selectDate, onSelect }) => {
     });
 
     setMonthProps({
-      select: yearProps.select === year ? dateProps.month : "",
+      select: yearProps.select === year.toString() ? dateProps.month : "",
     });
   };
 
