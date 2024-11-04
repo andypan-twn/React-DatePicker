@@ -145,4 +145,34 @@ describe("Test DatePicker Component", () => {
     fireEvent.click(screen.getByText(">"));
     expect(screen.queryByText("9990 - 9999")).toBeInTheDocument();
   });
+
+  test("Selected element should remain selected at all times", () => {
+    render(<DatePicker selectDate="2000-01-01" />);
+
+    // Go to Month Level
+    fireEvent.click(screen.getByText("Jan 2000"));
+    expect(screen.queryByText("Jan")).toHaveClass("select");
+
+    // Previous and next btn on Month Level
+    fireEvent.click(screen.getByText("<"));
+    fireEvent.click(screen.getByText(">"));
+    expect(screen.queryByText("Jan")).toHaveClass("select");
+
+    // Go to Year Level
+    fireEvent.click(screen.getByText("2000"));
+    expect(screen.queryByText("2000")).toHaveClass("select");
+
+    // Previous and next btn on Year Level
+    fireEvent.click(screen.getByText("<"));
+    fireEvent.click(screen.getByText(">"));
+    expect(screen.queryByText("2000")).toHaveClass("select");
+
+    // Go to Month Level
+    fireEvent.click(screen.getByText("2000"));
+    expect(screen.queryByText("Jan")).toHaveClass("select");
+
+    // Go to Date Level
+    fireEvent.click(screen.getByText("Jan"));
+    expect(screen.queryAllByText("1")[0]).toHaveClass("select");
+  });
 });
